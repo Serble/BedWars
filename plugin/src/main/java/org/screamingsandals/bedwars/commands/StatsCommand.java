@@ -19,6 +19,7 @@
 
 package org.screamingsandals.bedwars.commands;
 
+import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.screamingsandals.bedwars.Main;
 import org.screamingsandals.bedwars.statistics.PlayerStatistic;
 import org.bukkit.Bukkit;
@@ -51,7 +52,7 @@ public class StatsCommand extends BaseCommand {
                     if (off == null) {
                         sender.sendMessage(i18n("statistics_player_is_not_exists"));
                     } else {
-                        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(off);
+                        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(off.getUniqueId()));
                         if (statistic == null) {
                             sender.sendMessage(i18n("statistics_not_found"));
                         } else {
@@ -62,7 +63,7 @@ public class StatsCommand extends BaseCommand {
             } else {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
-                    PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(player);
+                    PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(player.getUniqueId()));
                     if (statistic == null) {
                         player.sendMessage(i18n("statistics_not_found"));
                     } else {

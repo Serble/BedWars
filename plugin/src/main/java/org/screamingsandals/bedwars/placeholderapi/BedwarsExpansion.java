@@ -20,6 +20,7 @@
 package org.screamingsandals.bedwars.placeholderapi;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -104,7 +105,7 @@ public class BedwarsExpansion extends PlaceholderExpansion {
             }
             playerName = playerName.substring(0, index);
 
-            PlayerStatistic stats = Main.getPlayerStatisticsManager().getStatistic(Bukkit.getOfflinePlayer(playerName));
+            PlayerStatistic stats = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(Bukkit.getOfflinePlayer(playerName).getUniqueId()));
 
             if (stats == null) {
                 return null;
@@ -294,7 +295,7 @@ public class BedwarsExpansion extends PlaceholderExpansion {
                 return null;
             }
 
-            PlayerStatistic stats = Main.getPlayerStatisticsManager().getStatistic(player);
+            PlayerStatistic stats = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(player));
 
             if (stats == null) {
                 return null;

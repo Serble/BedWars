@@ -19,6 +19,7 @@
 
 package org.screamingsandals.bedwars.statistics;
 
+import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.Bukkit;
 import org.screamingsandals.bedwars.Main;
 import org.screamingsandals.bedwars.api.events.BedwarsSavePlayerStatisticEvent;
@@ -45,16 +46,16 @@ public class PlayerStatisticManager implements PlayerStatisticsManager {
         this.fileDatabase = null;
     }
 
-    public PlayerStatistic getStatistic(OfflinePlayer player) {
+    public PlayerStatistic getStatistic(UUID player) {
         if (player == null) {
             return null;
         }
 
-        if (!this.playerStatistic.containsKey(player.getUniqueId())) {
-            return this.loadStatistic(player.getUniqueId());
+        if (!this.playerStatistic.containsKey(player)) {
+            return this.loadStatistic(player);
         }
 
-        return this.playerStatistic.get(player.getUniqueId());
+        return this.playerStatistic.get(player);
     }
 
     public void initialize() {
@@ -126,7 +127,10 @@ public class PlayerStatisticManager implements PlayerStatisticsManager {
         allScores.entrySet().stream()
                 .sorted((c1, c2) -> Comparator.<Integer>reverseOrder().compare(c1.getValue().getValue(), c2.getValue().getValue()))
                 .limit(count)
-                .forEach(entry -> entries.add(new org.screamingsandals.bedwars.statistics.LeaderboardEntry(Bukkit.getOfflinePlayer(entry.getKey()), entry.getValue().getValue(), entry.getValue().getKey())));
+                .forEach(entry -> {
+                    UUID actualPlayerId = GameProfileUtils.getPlayerFromProfile(entry.getKey());
+                    entries.add(new org.screamingsandals.bedwars.statistics.LeaderboardEntry(Bukkit.getOfflinePlayer(actualPlayerId), entry.getValue().getValue(), entry.getValue().getKey()));
+                });
 
         return entries;
     }
@@ -280,7 +284,7 @@ public class PlayerStatisticManager implements PlayerStatisticsManager {
 
     public void unloadStatistic(OfflinePlayer player) {
         if (Main.getConfigurator().config.getString("statistics.type").equalsIgnoreCase("database")) {
-            this.playerStatistic.remove(player.getUniqueId());
+            this.playerStatistic.remove(GameProfileUtils.getPlayerUuid(player.getUniqueId()));
         }
     }
 

@@ -20,6 +20,7 @@
 package org.screamingsandals.bedwars.listener;
 
 import net.milkbowl.vault.chat.Chat;
+import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -133,7 +134,7 @@ public class PlayerListener implements Listener {
                     team.players.remove(gVictim);
                     team.getScoreboardTeam().removeEntry(victim.getName());
                     if (Main.isPlayerStatisticsEnabled()) {
-                        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(victim);
+                        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(victim));
                         statistic.addLoses(1);
                         statistic.addScore(Main.getConfigurator().config.getInt("statistics.scores.lose", 0));
 
@@ -180,7 +181,7 @@ public class PlayerListener implements Listener {
                 Main.getInstance().getServer().getPluginManager().callEvent(killedEvent);
 
                 if (Main.isPlayerStatisticsEnabled()) {
-                    PlayerStatistic diePlayer = Main.getPlayerStatisticsManager().getStatistic(victim);
+                    PlayerStatistic diePlayer = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(victim));
                     PlayerStatistic killerPlayer;
 
                     if (!onlyOnBedDestroy || !isBed) {
@@ -190,7 +191,7 @@ public class PlayerListener implements Listener {
 
                     if (killer != null) {
                         if (!onlyOnBedDestroy || !isBed) {
-                            killerPlayer = Main.getPlayerStatisticsManager().getStatistic(killer);
+                            killerPlayer = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(killer));
                             if (killerPlayer != null) {
                                 killerPlayer.addKills(1);
                                 killerPlayer.addScore(Main.getConfigurator().config.getInt("statistics.scores.kill", 10));

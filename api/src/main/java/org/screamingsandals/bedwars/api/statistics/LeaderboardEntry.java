@@ -22,8 +22,12 @@ package org.screamingsandals.bedwars.api.statistics;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public interface LeaderboardEntry {
     OfflinePlayer getPlayer();
+
+    UUID getPlayerId();
 
     int getTotalScore();
 

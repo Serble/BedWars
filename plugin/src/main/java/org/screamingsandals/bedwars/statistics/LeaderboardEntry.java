@@ -19,13 +19,17 @@
 
 package org.screamingsandals.bedwars.statistics;
 
+import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
 import org.screamingsandals.bedwars.Main;
 import org.screamingsandals.bedwars.api.statistics.PlayerStatistic;
 
+import java.util.UUID;
+
 public class LeaderboardEntry implements org.screamingsandals.bedwars.api.statistics.LeaderboardEntry {
     private final OfflinePlayer offlinePlayer;
+    private final UUID playerId;
     private final int currentScore;
     private final @Nullable String latestKnownName;
 
@@ -33,11 +37,17 @@ public class LeaderboardEntry implements org.screamingsandals.bedwars.api.statis
         this.offlinePlayer = offlinePlayer;
         this.currentScore = currentScore;
         this.latestKnownName = latestKnownName;
+        this.playerId = GameProfileUtils.getPlayerUuid(offlinePlayer.getUniqueId());
     }
 
     @Override
     public OfflinePlayer getPlayer() {
         return this.offlinePlayer;
+    }
+
+    @Override
+    public UUID getPlayerId() {
+        return playerId;
     }
 
     @Override
@@ -47,7 +57,7 @@ public class LeaderboardEntry implements org.screamingsandals.bedwars.api.statis
 
     @Override
     public PlayerStatistic fetchStatistics() {
-        return Main.getPlayerStatisticsManager().getStatistic(offlinePlayer);
+        return Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(offlinePlayer.getUniqueId()));
     }
 
     @Override

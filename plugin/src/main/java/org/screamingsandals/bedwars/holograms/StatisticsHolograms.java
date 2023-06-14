@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
 
+import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -99,11 +100,11 @@ public class StatisticsHolograms implements TouchHandler {
 	}
 
     public void cleanupPlayerLeave(OfflinePlayer player) {
-        final List<Hologram> holos = holograms.get(player.getUniqueId());
+        final List<Hologram> holos = holograms.get(GameProfileUtils.getPlayerUuid(player.getUniqueId()));
         if (holos != null) {
             holos.forEach(holo -> holo.destroy());
             holos.clear();
-            holograms.remove(player.getUniqueId());
+            holograms.remove(GameProfileUtils.getPlayerUuid(player.getUniqueId()));
         }
     }
 
@@ -130,11 +131,11 @@ public class StatisticsHolograms implements TouchHandler {
 	
 	public void updatePlayerHologram(Player player, Location holoLocation) {
         List<Hologram> holograms;
-        if (!this.holograms.containsKey(player.getUniqueId())) {
-            this.holograms.put(player.getUniqueId(), new ArrayList<>());
+        if (!this.holograms.containsKey(GameProfileUtils.getPlayerUuid(player))) {
+            this.holograms.put(GameProfileUtils.getPlayerUuid(player), new ArrayList<>());
         }
 
-        holograms = this.holograms.get(player.getUniqueId());
+        holograms = this.holograms.get(GameProfileUtils.getPlayerUuid(player));
         Hologram holo = this.getHologramByLocation(holograms, holoLocation);
         if (holo == null && player.getWorld() == holoLocation.getWorld()) {
             holograms.add(this.createPlayerStatisticHologram(player, holoLocation));
@@ -223,7 +224,7 @@ public class StatisticsHolograms implements TouchHandler {
 	}
 
     private void updatePlayerStatisticHologram(Player player, final Hologram holo) {
-        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(player);
+        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(player));
         
         List<String> lines = new ArrayList<>();
 
