@@ -19,21 +19,19 @@
 
 package org.screamingsandals.bedwars.statistics;
 
-import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.Bukkit;
-import org.screamingsandals.bedwars.Main;
-import org.screamingsandals.bedwars.api.events.BedwarsSavePlayerStatisticEvent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.screamingsandals.bedwars.Main;
+import org.screamingsandals.bedwars.api.events.BedwarsSavePlayerStatisticEvent;
 import org.screamingsandals.bedwars.api.statistics.LeaderboardEntry;
 import org.screamingsandals.bedwars.api.statistics.PlayerStatisticsManager;
 
 import java.io.File;
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class PlayerStatisticManager implements PlayerStatisticsManager {
     private File databaseFile = null;
@@ -128,7 +126,7 @@ public class PlayerStatisticManager implements PlayerStatisticsManager {
                 .sorted((c1, c2) -> Comparator.<Integer>reverseOrder().compare(c1.getValue().getValue(), c2.getValue().getValue()))
                 .limit(count)
                 .forEach(entry -> {
-                    UUID actualPlayerId = GameProfileUtils.getPlayerFromProfile(entry.getKey());
+                    UUID actualPlayerId = Main.getInstance().getIdService().getPlayerFromProfile(entry.getKey());
                     entries.add(new org.screamingsandals.bedwars.statistics.LeaderboardEntry(Bukkit.getOfflinePlayer(actualPlayerId), entry.getValue().getValue(), entry.getValue().getKey()));
                 });
 
@@ -284,7 +282,7 @@ public class PlayerStatisticManager implements PlayerStatisticsManager {
 
     public void unloadStatistic(OfflinePlayer player) {
         if (Main.getConfigurator().config.getString("statistics.type").equalsIgnoreCase("database")) {
-            this.playerStatistic.remove(GameProfileUtils.getPlayerUuid(player.getUniqueId()));
+            this.playerStatistic.remove(Main.getInstance().getIdService().getPlayerUuid(player.getUniqueId()));
         }
     }
 

@@ -19,13 +19,6 @@
 
 package org.screamingsandals.bedwars.holograms;
 
-import static org.screamingsandals.bedwars.lib.lang.I.i18n;
-
-import java.io.File;
-import java.util.*;
-import java.util.Map.Entry;
-
-import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -37,6 +30,12 @@ import org.screamingsandals.bedwars.api.statistics.PlayerStatistic;
 import org.screamingsandals.bedwars.commands.BaseCommand;
 import org.screamingsandals.bedwars.lib.nms.holograms.Hologram;
 import org.screamingsandals.bedwars.lib.nms.holograms.TouchHandler;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
+
+import static org.screamingsandals.bedwars.lib.lang.I.i18n;
 
 public class StatisticsHolograms implements TouchHandler {
 
@@ -100,11 +99,11 @@ public class StatisticsHolograms implements TouchHandler {
 	}
 
     public void cleanupPlayerLeave(OfflinePlayer player) {
-        final List<Hologram> holos = holograms.get(GameProfileUtils.getPlayerUuid(player.getUniqueId()));
+        final List<Hologram> holos = holograms.get(Main.getInstance().getIdService().getPlayerUuid(player.getUniqueId()));
         if (holos != null) {
             holos.forEach(holo -> holo.destroy());
             holos.clear();
-            holograms.remove(GameProfileUtils.getPlayerUuid(player.getUniqueId()));
+            holograms.remove(Main.getInstance().getIdService().getPlayerUuid(player.getUniqueId()));
         }
     }
 
@@ -131,11 +130,11 @@ public class StatisticsHolograms implements TouchHandler {
 	
 	public void updatePlayerHologram(Player player, Location holoLocation) {
         List<Hologram> holograms;
-        if (!this.holograms.containsKey(GameProfileUtils.getPlayerUuid(player))) {
-            this.holograms.put(GameProfileUtils.getPlayerUuid(player), new ArrayList<>());
+        if (!this.holograms.containsKey(Main.getInstance().getIdService().getPlayerUuid(player))) {
+            this.holograms.put(Main.getInstance().getIdService().getPlayerUuid(player), new ArrayList<>());
         }
 
-        holograms = this.holograms.get(GameProfileUtils.getPlayerUuid(player));
+        holograms = this.holograms.get(Main.getInstance().getIdService().getPlayerUuid(player));
         Hologram holo = this.getHologramByLocation(holograms, holoLocation);
         if (holo == null && player.getWorld() == holoLocation.getWorld()) {
             holograms.add(this.createPlayerStatisticHologram(player, holoLocation));
@@ -224,7 +223,7 @@ public class StatisticsHolograms implements TouchHandler {
 	}
 
     private void updatePlayerStatisticHologram(Player player, final Hologram holo) {
-        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(player));
+        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(Main.getInstance().getIdService().getPlayerUuid(player));
         
         List<String> lines = new ArrayList<>();
 

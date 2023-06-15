@@ -19,6 +19,7 @@
 
 package org.screamingsandals.bedwars;
 
+import net.serble.serblenetworkplugin.API.IdService;
 import org.bstats.charts.SimplePie;
 import org.screamingsandals.bedwars.lib.lang.I18n;
 import net.milkbowl.vault.economy.Economy;
@@ -85,6 +86,7 @@ public class Main extends JavaPlugin implements BedwarsAPI {
     private boolean isNMS;
     private int versionNumber = 0;
     private Economy econ = null;
+    private IdService idService;
     private HashMap<String, Game> games = new HashMap<>();
     private HashMap<Player, GamePlayer> playersInGame = new HashMap<>();
     private HashMap<Entity, Game> entitiesInGame = new HashMap<>();
@@ -117,6 +119,10 @@ public class Main extends JavaPlugin implements BedwarsAPI {
 
     public static Main getInstance() {
         return instance;
+    }
+
+    public IdService getIdService() {
+        return idService;
     }
 
     public static Configurator getConfigurator() {
@@ -368,6 +374,10 @@ public class Main extends JavaPlugin implements BedwarsAPI {
         } else {
             isVault = setupEconomy();
         }
+
+        RegisteredServiceProvider<IdService> idServiceRegisteredServiceProvider = getServer().getServicesManager().getRegistration(IdService.class);
+        assert idServiceRegisteredServiceProvider != null;
+        idService = idServiceRegisteredServiceProvider.getProvider();
 
         String[] bukkitVersion = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
         versionNumber = 0;

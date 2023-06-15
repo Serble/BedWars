@@ -19,7 +19,6 @@
 
 package org.screamingsandals.bedwars.statistics;
 
-import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
 import org.screamingsandals.bedwars.Main;
@@ -37,7 +36,7 @@ public class LeaderboardEntry implements org.screamingsandals.bedwars.api.statis
         this.offlinePlayer = offlinePlayer;
         this.currentScore = currentScore;
         this.latestKnownName = latestKnownName;
-        this.playerId = GameProfileUtils.getPlayerUuid(offlinePlayer.getUniqueId());
+        this.playerId = Main.getInstance().getIdService().getPlayerUuid(offlinePlayer.getUniqueId());
     }
 
     @Override
@@ -57,7 +56,7 @@ public class LeaderboardEntry implements org.screamingsandals.bedwars.api.statis
 
     @Override
     public PlayerStatistic fetchStatistics() {
-        return Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(offlinePlayer.getUniqueId()));
+        return Main.getPlayerStatisticsManager().getStatistic(Main.getInstance().getIdService().getPlayerUuid(offlinePlayer.getUniqueId()));
     }
 
     @Override

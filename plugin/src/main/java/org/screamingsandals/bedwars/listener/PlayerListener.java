@@ -20,7 +20,6 @@
 package org.screamingsandals.bedwars.listener;
 
 import net.milkbowl.vault.chat.Chat;
-import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -55,18 +54,21 @@ import org.screamingsandals.bedwars.api.game.GameStatus;
 import org.screamingsandals.bedwars.boss.BossBar18;
 import org.screamingsandals.bedwars.commands.BaseCommand;
 import org.screamingsandals.bedwars.game.*;
+import org.screamingsandals.bedwars.lib.debug.Debug;
+import org.screamingsandals.bedwars.lib.nms.entity.PlayerUtils;
 import org.screamingsandals.bedwars.special.listener.ProtectionWallListener;
 import org.screamingsandals.bedwars.special.listener.RescuePlatformListener;
 import org.screamingsandals.bedwars.statistics.PlayerStatistic;
 import org.screamingsandals.bedwars.utils.*;
-import org.screamingsandals.bedwars.lib.debug.Debug;
-import org.screamingsandals.bedwars.lib.nms.entity.PlayerUtils;
 import org.screamingsandals.simpleinventories.utils.StackParser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
-import static org.screamingsandals.bedwars.lib.lang.I18n.*;
 import static org.screamingsandals.bedwars.commands.BaseCommand.ADMIN_PERMISSION;
+import static org.screamingsandals.bedwars.lib.lang.I18n.*;
 
 public class PlayerListener implements Listener {
 
@@ -134,7 +136,7 @@ public class PlayerListener implements Listener {
                     team.players.remove(gVictim);
                     team.getScoreboardTeam().removeEntry(victim.getName());
                     if (Main.isPlayerStatisticsEnabled()) {
-                        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(victim));
+                        PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(Main.getInstance().getIdService().getPlayerUuid(victim));
                         statistic.addLoses(1);
                         statistic.addScore(Main.getConfigurator().config.getInt("statistics.scores.lose", 0));
 
@@ -181,7 +183,7 @@ public class PlayerListener implements Listener {
                 Main.getInstance().getServer().getPluginManager().callEvent(killedEvent);
 
                 if (Main.isPlayerStatisticsEnabled()) {
-                    PlayerStatistic diePlayer = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(victim));
+                    PlayerStatistic diePlayer = Main.getPlayerStatisticsManager().getStatistic(Main.getInstance().getIdService().getPlayerUuid(victim));
                     PlayerStatistic killerPlayer;
 
                     if (!onlyOnBedDestroy || !isBed) {
@@ -191,7 +193,7 @@ public class PlayerListener implements Listener {
 
                     if (killer != null) {
                         if (!onlyOnBedDestroy || !isBed) {
-                            killerPlayer = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(killer));
+                            killerPlayer = Main.getPlayerStatisticsManager().getStatistic(Main.getInstance().getIdService().getPlayerUuid(killer));
                             if (killerPlayer != null) {
                                 killerPlayer.addKills(1);
                                 killerPlayer.addScore(Main.getConfigurator().config.getInt("statistics.scores.kill", 10));

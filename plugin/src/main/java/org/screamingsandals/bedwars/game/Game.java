@@ -83,8 +83,6 @@ import org.screamingsandals.bedwars.lib.signmanager.SignBlock;
 import org.screamingsandals.simpleinventories.utils.MaterialSearchEngine;
 import org.screamingsandals.simpleinventories.utils.StackParser;
 
-import net.serble.serblenetworkplugin.API.GameProfileUtils;
-
 import com.onarandombox.MultiverseCore.api.Core;
 
 public class Game implements org.screamingsandals.bedwars.api.game.Game {
@@ -693,7 +691,7 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
 
                     if (broker != null) {
                         if (Main.isPlayerStatisticsEnabled()) {
-                            PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(broker));
+                            PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(Main.getInstance().getIdService().getPlayerUuid(broker));
                             statistic.addDestroyedBeds(1);
                             statistic.addScore(Main.getConfigurator().config.getInt("statistics.scores.bed-destroy", 25));
                             Main.depositPlayer(broker, Main.getVaultBedDestroyReward());
@@ -728,7 +726,7 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
 
         if (Main.isPlayerStatisticsEnabled()) {
             // Load
-            Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(gamePlayer.player));
+            Main.getPlayerStatisticsManager().getStatistic(Main.getInstance().getIdService().getPlayerUuid(gamePlayer.player));
         }
 
         if (arenaTime.time >= 0) {
@@ -902,7 +900,7 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
         }
 
         if (Main.isPlayerStatisticsEnabled()) {
-            PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(gamePlayer.player));
+            PlayerStatistic statistic = Main.getPlayerStatisticsManager().getStatistic(Main.getInstance().getIdService().getPlayerUuid(gamePlayer.player));
             Main.getPlayerStatisticsManager().storeStatistic(statistic);
 
             Main.getPlayerStatisticsManager().unloadStatistic(gamePlayer.player);
@@ -2139,7 +2137,7 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
 
                                         if (Main.isPlayerStatisticsEnabled()) {
                                             PlayerStatistic statistic = Main.getPlayerStatisticsManager()
-                                                    .getStatistic(GameProfileUtils.getPlayerUuid(player.player));
+                                                    .getStatistic(Main.getInstance().getIdService().getPlayerUuid(player.player));
                                             statistic.addWins(1);
                                             statistic.addScore(Main.getConfigurator().config.getInt("statistics.scores.win", 50));
 
@@ -2153,7 +2151,7 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
 
                                             if (Main.getConfigurator().config
                                                     .getBoolean("statistics.show-on-game-end")) {
-                                                StatsCommand.sendStats(player.player, Main.getPlayerStatisticsManager().getStatistic(GameProfileUtils.getPlayerUuid(player.player)));
+                                                StatsCommand.sendStats(player.player, Main.getPlayerStatisticsManager().getStatistic(Main.getInstance().getIdService().getPlayerUuid(player.player)));
                                             }
 
                                         }
@@ -2161,7 +2159,7 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
                                         if (Main.getConfigurator().config.getBoolean("rewards.enabled")) {
                                             if (Main.isPlayerStatisticsEnabled()) {
                                                 PlayerStatistic statistic = Main.getPlayerStatisticsManager()
-                                                        .getStatistic(GameProfileUtils.getPlayerUuid(player.player));
+                                                        .getStatistic(Main.getInstance().getIdService().getPlayerUuid(player.player));
                                                 Game.this.dispatchRewardCommands("player-win-run-immediately", player.player,
                                                         statistic.getScore());
                                             } else {
@@ -2175,7 +2173,7 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
                                                 public void run() {
                                                     if (Main.isPlayerStatisticsEnabled()) {
                                                         PlayerStatistic statistic = Main.getPlayerStatisticsManager()
-                                                                .getStatistic(GameProfileUtils.getPlayerUuid(player.player));
+                                                                .getStatistic(Main.getInstance().getIdService().getPlayerUuid(player.player));
                                                         Game.this.dispatchRewardCommands("player-win", pl,
                                                                 statistic.getScore());
                                                     } else {
@@ -2314,7 +2312,7 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
                         public void run() {
                             if (Main.isPlayerStatisticsEnabled()) {
                                 PlayerStatistic statistic = Main.getPlayerStatisticsManager()
-                                        .getStatistic(GameProfileUtils.getPlayerUuid(player.player));
+                                        .getStatistic(Main.getInstance().getIdService().getPlayerUuid(player.player));
                                 Game.this.dispatchRewardCommands("player-end-game", pl, statistic.getScore());
                             } else {
                                 Game.this.dispatchRewardCommands("player-end-game", pl, 0);

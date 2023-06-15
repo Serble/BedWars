@@ -19,11 +19,9 @@
 
 package org.screamingsandals.bedwars.holograms;
 
-import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.screamingsandals.bedwars.Main;
@@ -33,7 +31,10 @@ import org.screamingsandals.bedwars.lib.nms.holograms.Hologram;
 import org.screamingsandals.bedwars.lib.nms.holograms.TouchHandler;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.screamingsandals.bedwars.lib.lang.I.i18n;

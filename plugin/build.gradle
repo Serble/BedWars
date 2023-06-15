@@ -25,7 +25,7 @@ dependencies {
     implementation 'org.screamingsandals.simpleinventories:SimpleInventories-Core:1.0.6.8'
     implementation 'org.bstats:bstats-bukkit:2.2.1'
 
-    implementation files('libs/SerbleNetworkPlugin.jar')
+    compileOnly files('libs/SerbleNetworkPlugin.jar')
 }
 
 processResources {

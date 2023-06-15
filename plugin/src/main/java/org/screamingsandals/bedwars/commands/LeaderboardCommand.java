@@ -19,7 +19,6 @@
 
 package org.screamingsandals.bedwars.commands;
 
-import net.serble.serblenetworkplugin.API.GameProfileUtils;
 import org.bukkit.command.CommandSender;
 import org.screamingsandals.bedwars.Main;
 import org.screamingsandals.bedwars.api.statistics.LeaderboardEntry;
@@ -50,7 +49,7 @@ public class LeaderboardCommand extends BaseCommand {
                 AtomicInteger l = new AtomicInteger(1);
                 statistics.forEach(leaderboardEntry -> {
                     m("leaderboard_line").replace("order", l.getAndIncrement())
-                            .replace("player", leaderboardEntry.getPlayer().getName() != null ? leaderboardEntry.getPlayer().getName() : (leaderboardEntry.getLatestKnownName() != null ? leaderboardEntry.getLatestKnownName() : GameProfileUtils.getPlayerUuid(leaderboardEntry.getPlayer().getUniqueId()).toString()))
+                            .replace("player", leaderboardEntry.getPlayer().getName() != null ? leaderboardEntry.getPlayer().getName() : (leaderboardEntry.getLatestKnownName() != null ? leaderboardEntry.getLatestKnownName() : Main.getInstance().getIdService().getPlayerUuid(leaderboardEntry.getPlayer().getUniqueId()).toString()))
                             .replace("score", leaderboardEntry.getTotalScore()).send(sender);
                 });
             }
