@@ -19,6 +19,7 @@
 
 package org.screamingsandals.bedwars.listener;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -1128,6 +1129,7 @@ public class PlayerListener implements Listener {
             } else {
                 format = Main.getConfigurator().config.getString("chat.all-chat", "[ALL] ") + format;
             }
+            format = ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(player, format));
 
             event.setFormat(format + message.replace("%", "%%")); // Fix using % in chat
             Iterator<Player> recipients = event.getRecipients().iterator();

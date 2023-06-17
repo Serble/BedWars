@@ -42,7 +42,7 @@ public class PlayerStatistic implements ConfigurationSerializable, org.screaming
     public PlayerStatistic(UUID uuid) {
         this.uuid = uuid;
 
-        Player player = Bukkit.getPlayer(uuid);
+        Player player = Bukkit.getPlayer(Main.getInstance().getIdService().getPlayerFromProfile(uuid));
         if (player != null && !this.name.equals(player.getName())) {
             this.name = player.getName();
         }
