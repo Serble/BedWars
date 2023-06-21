@@ -42,6 +42,10 @@ public class AutojoinCommand extends BaseCommand {
             return true;
         }
 
+        if (!Main.getInstance().getPartyService().canJoinGameAndAlert(player)) {
+            return true;
+        }
+
         Game game = Main.getInstance().getGameWithHighestPlayers(); // prioritizing player count - scorp
         if (game == null) {
             player.sendMessage(i18n("there_is_no_empty_game"));

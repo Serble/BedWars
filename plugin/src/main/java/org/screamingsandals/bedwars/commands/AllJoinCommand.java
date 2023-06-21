@@ -57,6 +57,10 @@ public class AllJoinCommand extends BaseCommand {
                 return;
             }
 
+            if (!Main.getInstance().getPartyService().canJoinGame(player)) {
+                return;
+            }
+
             if (Main.isPlayerInGame(player)) {
                 Main.getPlayerGameProfile(player).getGame().leaveFromGame(player);
             }

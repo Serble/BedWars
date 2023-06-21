@@ -42,6 +42,10 @@ public class JoinCommand extends BaseCommand {
             return true;
         }
 
+        if (!Main.getInstance().getPartyService().canJoinGameAndAlert(player)) {
+            return true;
+        }
+
         if (args.size() >= 1) {
             String arenaN = args.get(0);
             if (Main.isGameExists(arenaN)) {

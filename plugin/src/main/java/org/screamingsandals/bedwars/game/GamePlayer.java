@@ -62,12 +62,13 @@ public class GamePlayer {
                 this.restoreInv();
             }
         } else if (this.game == null && game != null) {
-            this.storeInv();
-            this.clean();
+//            this.storeInv();
+//            this.clean();
             this.game = game;
             this.isSpectator = false;
             this.mainLobbyUsed = false;
             this.game.internalJoinPlayer(this);
+            Main.getInstance().getPartyService().triggerWarp(this.player);
             if (this.game != null) {
                 this.latestGame = this.game.getName();
             }
@@ -75,9 +76,10 @@ public class GamePlayer {
             this.game.internalLeavePlayer(this);
             this.game = game;
             this.isSpectator = false;
-            this.clean();
+//            this.clean();
             this.mainLobbyUsed = false;
             this.game.internalJoinPlayer(this);
+            Main.getInstance().getPartyService().triggerWarp(this.player);
             if (this.game != null) {
                 this.latestGame = this.game.getName();
             }

@@ -41,6 +41,10 @@ public class RejoinCommand extends BaseCommand {
             return true;
         }
 
+        if (!Main.getInstance().getPartyService().canJoinGameAndAlert(player)) {
+            return true;
+        }
+
         String name = null;
         if (Main.isPlayerGameProfileRegistered(player)) {
             name = Main.getPlayerGameProfile(player).getLatestGameName();

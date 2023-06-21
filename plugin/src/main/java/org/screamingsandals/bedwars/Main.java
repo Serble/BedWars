@@ -20,6 +20,7 @@
 package org.screamingsandals.bedwars;
 
 import net.serble.serblenetworkplugin.API.IdService;
+import net.serble.serblenetworkplugin.API.PartyService;
 import org.bstats.charts.SimplePie;
 import org.screamingsandals.bedwars.lib.lang.I18n;
 import net.milkbowl.vault.economy.Economy;
@@ -87,6 +88,7 @@ public class Main extends JavaPlugin implements BedwarsAPI {
     private int versionNumber = 0;
     private Economy econ = null;
     private IdService idService;
+    private PartyService partyService;
     private HashMap<String, Game> games = new HashMap<>();
     private HashMap<Player, GamePlayer> playersInGame = new HashMap<>();
     private HashMap<Entity, Game> entitiesInGame = new HashMap<>();
@@ -123,6 +125,10 @@ public class Main extends JavaPlugin implements BedwarsAPI {
 
     public IdService getIdService() {
         return idService;
+    }
+
+    public PartyService getPartyService() {
+        return partyService;
     }
 
     public static Configurator getConfigurator() {
@@ -378,6 +384,12 @@ public class Main extends JavaPlugin implements BedwarsAPI {
         RegisteredServiceProvider<IdService> idServiceRegisteredServiceProvider = getServer().getServicesManager().getRegistration(IdService.class);
         assert idServiceRegisteredServiceProvider != null;
         idService = idServiceRegisteredServiceProvider.getProvider();
+
+        RegisteredServiceProvider<PartyService> partyServiceRegisteredServiceProvider = getServer().getServicesManager().getRegistration(PartyService.class);
+        assert partyServiceRegisteredServiceProvider != null;
+        partyService = partyServiceRegisteredServiceProvider.getProvider();
+
+        partyService.registerWarpListener(new SerbleWarpListener());
 
         String[] bukkitVersion = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
         versionNumber = 0;
@@ -663,8 +675,10 @@ public class Main extends JavaPlugin implements BedwarsAPI {
         return games.get(name);
     }
 
-    private TreeMap<Integer, org.screamingsandals.bedwars.api.game.Game> filterGames0() {
-        TreeMap<Integer, org.screamingsandals.bedwars.api.game.Game> gameList = new TreeMap<>();
+    private TreeMap<Double, org.screamingsandals.bedwars.api.game.Game> filterGames0() {
+        TreeMap<Double, org.screamingsandals.bedwars.api.game.Game> gameList = new TreeMap<>();
+        Random random = new Random();
+
         for (org.screamingsandals.bedwars.api.game.Game game : getGames()) {
             if (game.getStatus() != GameStatus.WAITING) {
                 continue;
@@ -672,20 +686,26 @@ public class Main extends JavaPlugin implements BedwarsAPI {
             if (game.getConnectedPlayers().size() >= game.getMaxPlayers()) {
                 continue;
             }
-            gameList.put(game.countConnectedPlayers(), game);
+
+            double playerCount = game.countConnectedPlayers();
+            double randomFactor = 0.0001 * random.nextDouble();
+            double key = playerCount + randomFactor;
+
+            gameList.put(key, game);
         }
+
         return gameList;
     }
 
     @Override
     public org.screamingsandals.bedwars.api.game.Game getGameWithHighestPlayers() {
-        final Map.Entry<Integer, org.screamingsandals.bedwars.api.game.Game> entry = filterGames0().lastEntry();
+        final Map.Entry<Double, org.screamingsandals.bedwars.api.game.Game> entry = filterGames0().lastEntry();
         return (entry != null) ? entry.getValue() : null;
     }
 
     @Override
     public org.screamingsandals.bedwars.api.game.Game getGameWithLowestPlayers() {
-        Map.Entry<Integer, org.screamingsandals.bedwars.api.game.Game> entry = filterGames0().firstEntry();
+        Map.Entry<Double, org.screamingsandals.bedwars.api.game.Game> entry = filterGames0().firstEntry();
         return (entry != null) ? entry.getValue() : null;
     }
 
