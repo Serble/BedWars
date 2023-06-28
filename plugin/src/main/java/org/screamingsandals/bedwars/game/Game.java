@@ -819,6 +819,10 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
     }
 
     public void internalLeavePlayer(GamePlayer gamePlayer) {
+        internalLeavePlayer(gamePlayer, true);
+    }
+
+    public void internalLeavePlayer(GamePlayer gamePlayer, boolean teleport) {
         if (status == GameStatus.DISABLED) {
             return;
         }
@@ -871,7 +875,7 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
         gamePlayer.player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 
         if (Main.getConfigurator().config.getBoolean("mainlobby.enabled")
-                && !Main.getConfigurator().config.getBoolean("bungee.enabled")) {
+                && !Main.getConfigurator().config.getBoolean("bungee.enabled") && teleport) {
             try {
                 Location mainLobbyLocation = MiscUtils.readLocationFromString(
                         Bukkit.getWorld(Main.getConfigurator().config.getString("mainlobby.world")),

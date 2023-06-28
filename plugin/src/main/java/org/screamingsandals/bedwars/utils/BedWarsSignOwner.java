@@ -94,6 +94,7 @@ public class BedWarsSignOwner implements SignOwner {
         } else {
             Game game = Main.getGame(sign.getName());
             if (game != null) {
+				if (!Main.getInstance().getPartyService().canJoinGameAndAlert(player)) return;
                 game.joinToGame(player);
             } else {
                 m("sign_game_not_exists").send(player);

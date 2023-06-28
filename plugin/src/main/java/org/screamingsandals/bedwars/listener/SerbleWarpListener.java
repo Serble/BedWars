@@ -16,9 +16,10 @@ public class SerbleWarpListener implements WarpEventListener {
         Game game = Main.getPlayerGameProfile(warpEvent.getPartyLeader()).getGame();
 
         if (Main.isPlayerInGame(warpEvent.getTarget())) {
-            Main.getPlayerGameProfile(warpEvent.getTarget()).changeGame(null);
+            Main.getPlayerGameProfile(warpEvent.getTarget()).changeGame(game, false);
+        } else {
+            game.joinToGame(warpEvent.getTarget());
         }
-        game.joinToGame(warpEvent.getTarget());
         return true;
     }
 

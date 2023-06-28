@@ -27,8 +27,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Scoreboard;
 import org.screamingsandals.bedwars.Main;
-import org.screamingsandals.bedwars.utils.BungeeUtils;
 import org.screamingsandals.bedwars.lib.nms.entity.PlayerUtils;
+import org.screamingsandals.bedwars.utils.BungeeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +51,12 @@ public class GamePlayer {
     }
 
     public void changeGame(Game game) {
+        changeGame(game, true);
+    }
+
+    public void changeGame(Game game, boolean teleport) {
         if (this.game != null && game == null) {
-            this.game.internalLeavePlayer(this);
+            this.game.internalLeavePlayer(this, teleport);
             this.game = null;
             this.isSpectator = false;
             this.clean();
@@ -73,7 +77,7 @@ public class GamePlayer {
                 this.latestGame = this.game.getName();
             }
         } else if (this.game != null) {
-            this.game.internalLeavePlayer(this);
+            this.game.internalLeavePlayer(this, teleport);
             this.game = game;
             this.isSpectator = false;
 //            this.clean();
@@ -130,6 +134,8 @@ public class GamePlayer {
     }
 
     private void restoreRest() {
+        if (oldInventory == null || oldInventory.inventory == null) return; // Who cares lmao
+
         player.getInventory().setContents(oldInventory.inventory);
         player.getInventory().setArmorContents(oldInventory.armor);
 
