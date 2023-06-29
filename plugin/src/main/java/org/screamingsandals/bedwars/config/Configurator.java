@@ -190,6 +190,7 @@ public class Configurator {
         checkOrSetConfig(modify, "scoreboard.anchorEmpty", "&e\u2718");
         checkOrSetConfig(modify, "scoreboard.bedExists", "&a\u2714");
         checkOrSetConfig(modify, "scoreboard.teamTitle", "%bed%%color%%team%");
+        checkOrSetConfig(modify, "scoreboard.new-scoreboard.content", new String[] {"%team_status%"});
 
         checkOrSetConfig(modify, "title.enabled", true);
         checkOrSetConfig(modify, "title.fadeIn", 0);

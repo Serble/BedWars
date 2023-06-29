@@ -2521,13 +2521,37 @@ public class Game implements org.screamingsandals.bedwars.api.game.Game {
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         obj.setDisplayName(this.formatScoreboardTitle());
 
-        for (CurrentTeam team : teamsInGame) {
-            this.gameScoreboard.resetScores(this.formatScoreboardTeam(team, false, false));
-            this.gameScoreboard.resetScores(this.formatScoreboardTeam(team, false, true));
-            this.gameScoreboard.resetScores(this.formatScoreboardTeam(team, true, false));
+        List<String> scoreboardLines = Main.getConfigurator().config.getStringList("scoreboard.new-scoreboard.content");
 
-            Score score = obj.getScore(this.formatScoreboardTeam(team, !team.isBed, team.isBed && "RESPAWN_ANCHOR".equals(team.teamInfo.bed.getBlock().getType().name()) && Player116ListenerUtils.isAnchorEmpty(team.teamInfo.bed.getBlock())));
-            score.setScore(team.players.size());
+        // Add lines
+        int currentScore = 100;
+        for (String line : scoreboardLines) {
+            if (line.length() > 48) {
+                line = line.substring(0, 47);
+            }
+            line = line.replace("%game%", this.name);
+            line = line.replace("%status%", this.getStatus().toString());
+            line = line.replace("%time%", this.getFormattedTimeLeft());
+            line = line.replace("%players%", String.valueOf(this.players.size()));
+            line = line.replace("%maxplayers%", String.valueOf(this.calculatedMaxPlayers));
+            line = line.replace("%minplayers%", String.valueOf(this.minPlayers));
+            line = line.replace("%spectators%", String.valueOf(this.countSpectators()));
+
+            if (line.equals("%team_status%")) {
+                for (CurrentTeam team : teamsInGame) {
+                    this.gameScoreboard.resetScores(this.formatScoreboardTeam(team, false, false));
+                    this.gameScoreboard.resetScores(this.formatScoreboardTeam(team, false, true));
+                    this.gameScoreboard.resetScores(this.formatScoreboardTeam(team, true, false));
+
+                    Score score = obj.getScore(this.formatScoreboardTeam(team, !team.isBed, team.isBed && "RESPAWN_ANCHOR".equals(team.teamInfo.bed.getBlock().getType().name()) && Player116ListenerUtils.isAnchorEmpty(team.teamInfo.bed.getBlock())));
+                    score.setScore(currentScore--);
+                }
+                continue;
+            }
+
+            // Add line
+            Score score = obj.getScore(line);
+            score.setScore(currentScore--);
         }
 
         for (GamePlayer player : players) {
